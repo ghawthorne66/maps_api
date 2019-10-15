@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Find Restaurants</title>
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/skeleton.css">
+    <link rel="stylesheet" href="./css/normalize.css">
+  </head>
+  <body>
+    <div>
+      <div class="side-panel">
+        <h3>Find restaurants in your neighborhood.</h3>
+        <div class="container">
+          
+            <!-- <div id="locationField">
+                <input id="autocomplete"
+                       placeholder="Enter your address"
+                       onFocus="geolocate()"
+                       type="text"/>
+              </div> -->
+
+
+          <form>
+            <b>Restaurant type</b>
+            <input id="clear_filter" type="reset" value="Clear" />
+            <ul id="cuisine_types"></ul>
+          </form>
+          <table id="address">
+              <tr>
+                <td class="label">Street address</td>
+                <td class="slimField"><input class="field" id="street_number" disabled="true"/></td>
+                <td class="wideField" colspan="2"><input class="field" id="route" disabled="true"/></td>
+              </tr>
+              <tr>
+                <td class="label">City</td>
+                <td class="wideField" colspan="3"><input class="field" id="locality" disabled="true"/></td>
+              </tr>
+              <tr>
+                <td class="label">State</td>
+                <td class="slimField"><input class="field" id="administrative_area_level_1" disabled="true"/></td>
+                <td class="label">Zip code</td>
+                <td class="wideField"><input class="field" id="postal_code" disabled="true"/></td>
+              </tr>
+              <tr>
+                <td class="label">Country</td>
+                <td class="wideField" colspan="3"><input class="field" id="country" disabled="true"/></td>
+              </tr>
+            </table>
+        <!-- </div>
+        <div id="drawing_tools">
+          <small>Use drawing tools to highlight area to search restaurants.</small>
+          <p>
+            <input class="button-primary" id="start_drawing" type="button" value="Show Drawing Tools">
+            <input id="stop_drawing" type="button" value="Hide Drawing Tools">
+          </p>
+        </div> -->
+      </div>
+      <div id="map"></div>
+    </div>
+    <div id="notification" class="notification-box">Loading...</div>
+    </div>
+    <script type="text/javascript" src="./js/controller.js"></script>
+    <script type="text/javascript" src="./js/model.js"></script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdbgnrvZGHqZCMSROy9RbyAv09B3fZb_U&libraries=places,drawing&callback=initMap">
+    </script>
+  </body>
+</html>
