@@ -252,6 +252,11 @@ $("#search").on("click", function (event) {
   // Gets nearby places using the zip code the user inputted
   var city = $("#city").val();
   getNearbyPlaces({}, city);
+
+  // AJAX GET request to a /api/cities route
+  // that should respond with data from the db of corresponding cities
+  // then we push that data into our markers array
+  // call createDataMarkers function to display the markers on the page
 })
 
 function deleteMarkers() {
