@@ -7,55 +7,55 @@
 // parameter when you first load the API. For example:
 // <script
 // src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+var exampleData = [{
+  location: {
+    lat: 32.7341,
+    lng: -117.1446
+  },
+  name: "example"
+}]
+
 
 var placeSearch, autocomplete, map;
 var markers = [];
 
-
-var componentForm = {
-  street_number: 'short_name',
-  route: 'long_name',
-  locality: 'long_name',
-  administrative_area_level_1: 'short_name',
-  country: 'long_name',
-  postal_code: 'short_name'
-};
-
 function initMap() {
   console.log("initMap()");
   if (google.maps) {
-      console.log("1) Google maps has been loaded");
-  } 
+    console.log("1) Google maps has been loaded");
+  }
 
   if (typeof google === 'object' && typeof google.maps === 'object') {
-      console.log("2) Google maps has been loaded");
+    console.log("2) Google maps has been loaded");
   }
 
   bounds = new google.maps.LatLngBounds();
   infoWindow = new google.maps.InfoWindow();
   currentInfoWindow = infoWindow;
   infoPane = document.getElementById('panel');
-  
+
   // The location of San Diego
- pos = {
-      lat: 32.7157, 
-      lng: -117.1611 };
+  pos = {
+    lat: 32.7157,
+    lng: -117.1611
+  };
   // The map, centered at San Diego
   map = new google.maps.Map(
-      document.getElementById('map'), {
-      zoom: 12,
-      center: pos
+    document.getElementById('map'), {
+    zoom: 12,
+    center: pos
   });
   // The marker, positioned at San Diego
-  var marker;
-  marker = new google.maps.Marker({ position: pos, map: map });
-
+  // var marker;
+  // marker = new google.maps.Marker({ position: pos, map: map });
+  createDataMarkers(exampleData);
   bounds.extend(pos);
   // infoWindow.setPosition(pos);
   // infoWindow.setContent('Location found.');
-  console.log("Should be opening map: " + map);
-  infoWindow.open(map);
-  getNearbyPlaces(pos, "restaurants");
+
+  // console.log("Should be opening map: " + map);
+  // infoWindow.open(map);
+  // getNearbyPlaces(pos, "restaurants");
 
 }
 
@@ -63,27 +63,42 @@ function initMap() {
 function getNearbyPlaces(position, query) {
   //console.log("----------------> query: " + query);
   var request = {
-      location: position,
-      radius: '500',
-      query: query,
-      type: ['movie_theater']
+    location: position,
+    radius: '500',
+    query: query,
+    type: ['restaurants']
   };
   service = new google.maps.places.PlacesService(map);
   service.textSearch(request, nearbyCallback);
 }
 function nearbyCallback(results, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
-      createMarkers(results);
+    createMarkers(results);
   }
 }
+
+
+function createDataMarkers(arr) {
+  console.log("new data")
+  for (var i = 0; i < arr.length; i++) {
+      marker = new google.maps.Marker({
+      position: arr[i].location,
+      map: map,
+      title: arr[i].name
+    });
+    markers.push(marker);
+  }
+}
+
+createDataMarkers(exampleData)
+
+
 
 // Set markers at the location of each place result
 function createMarkers(places) {
   places.forEach(place => {
       // console.log("----------------------------------")
-      // console.log(" ")
-      // console.log(" ")
-      // console.log(" ")
+
       map.setCenter(place.geometry.location);
       let marker = new google.maps.Marker({
           position: place.geometry.location,
@@ -112,17 +127,17 @@ function createMarkers(places) {
 // InfoWindow to display details above the marker
 function showDetails(placeResult, marker, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
-      let placeInfowindow = new google.maps.InfoWindow();
-      let rating = "None";
-      if (placeResult.rating) rating = placeResult.rating;
-      placeInfowindow.setContent('<div><strong>' + placeResult.name +
-          '</strong><br>' + 'Rating: ' + rating + '</div>');
-      placeInfowindow.open(marker.map, marker);
-      currentInfoWindow.close();
-      currentInfoWindow = placeInfowindow;
-      showPanel(placeResult);
+    let placeInfowindow = new google.maps.InfoWindow();
+    let rating = "None";
+    if (placeResult.rating) rating = placeResult.rating;
+    placeInfowindow.setContent('<div><strong>' + placeResult.name +
+      '</strong><br>' + 'Rating: ' + rating + '</div>');
+    placeInfowindow.open(marker.map, marker);
+    currentInfoWindow.close();
+    currentInfoWindow = placeInfowindow;
+    showPanel(placeResult);
   } else {
-      console.log('showDetails failed: ' + status);
+    console.log('showDetails failed: ' + status);
   }
 }
 
@@ -131,7 +146,7 @@ function initAutocomplete() {
   // Create the autocomplete object, restricting the search predictions to
   // geographical location types.
   autocomplete = new google.maps.places.Autocomplete(
-      document.getElementById('autocomplete'), {types: ['geocode']});
+    document.getElementById('autocomplete'), { types: ['geocode'] });
 
   // Avoid paying for data that you don't need by restricting the set of
   // place fields that are returned to just the address components.
@@ -167,18 +182,18 @@ function fillInAddress() {
 function showPanel(placeResult) {
   // If infoPane is already open, close it
   if (infoPane.classList.contains("open")) {
-      infoPane.classList.remove("open");
+    infoPane.classList.remove("open");
   }
   // Clear the previous details
   while (infoPane.lastChild) {
-      infoPane.removeChild(infoPane.lastChild);
+    infoPane.removeChild(infoPane.lastChild);
   }
   if (placeResult.photos) {
-      let firstPhoto = placeResult.photos[0];
-      let photo = document.createElement('img');
-      photo.classList.add('hero');
-      photo.src = firstPhoto.getUrl();
-      infoPane.appendChild(photo);
+    let firstPhoto = placeResult.photos[0];
+    let photo = document.createElement('img');
+    photo.classList.add('hero');
+    photo.src = firstPhoto.getUrl();
+    infoPane.appendChild(photo);
   }
   // Add place details with text
   let name = document.createElement('h1');
@@ -186,24 +201,24 @@ function showPanel(placeResult) {
   name.textContent = placeResult.name;
   infoPane.appendChild(name);
   if (placeResult.rating) {
-      let rating = document.createElement('p');
-      rating.classList.add('details');
-      rating.textContent = `Rating: ${placeResult.rating} \u272e`;
-      infoPane.appendChild(rating);
+    let rating = document.createElement('p');
+    rating.classList.add('details');
+    rating.textContent = `Rating: ${placeResult.rating} \u272e`;
+    infoPane.appendChild(rating);
   }
   let address = document.createElement('p');
   address.classList.add('details');
   address.textContent = placeResult.formatted_address;
   infoPane.appendChild(address);
   if (placeResult.website) {
-      let websitePara = document.createElement('p');
-      let websiteLink = document.createElement('a');
-      let websiteUrl = document.createTextNode(placeResult.website);
-      websiteLink.appendChild(websiteUrl);
-      websiteLink.title = placeResult.website;
-      websiteLink.href = placeResult.website;
-      websitePara.appendChild(websiteLink);
-      infoPane.appendChild(websitePara);
+    let websitePara = document.createElement('p');
+    let websiteLink = document.createElement('a');
+    let websiteUrl = document.createTextNode(placeResult.website);
+    websiteLink.appendChild(websiteUrl);
+    websiteLink.title = placeResult.website;
+    websiteLink.href = placeResult.website;
+    websitePara.appendChild(websiteLink);
+    infoPane.appendChild(websitePara);
   }
   // Open the infoPane
   infoPane.classList.add("open");
@@ -216,13 +231,13 @@ function showPanel(placeResult) {
 function geolocate() {
   console.log("geolocate found")
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
+    navigator.geolocation.getCurrentPosition(function (position) {
       var geolocation = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       };
       var circle = new google.maps.Circle(
-          {center: geolocation, radius: position.coords.accuracy});
+        { center: geolocation, radius: position.coords.accuracy });
       autocomplete.setBounds(circle.getBounds());
     });
   }
@@ -230,19 +245,19 @@ function geolocate() {
 
 /////___________Search by Zip_____________////
 
-$("#search").on("click", function(event) {
+$("#search").on("click", function (event) {
   // Clear map 
   deleteMarkers();
 
   // Gets nearby places using the zip code the user inputted
-  var zipCode = $("#zipCode").val();
-  getNearbyPlaces({}, zipCode);
+  var city = $("#city").val();
+  getNearbyPlaces({}, city);
 })
 
 function deleteMarkers() {
 
   for (var i = 0; i < markers.length; i++) {
-     markers[i].setMap(null);
+    markers[i].setMap(null);
   }
 }
 

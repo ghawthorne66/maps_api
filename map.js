@@ -56,7 +56,7 @@ function filterResults() {
 function callSearchNearby(latLng) {
     let requestNearby = {
         location: latLng,
-        radius: '8000', //in meters.
+        radius: '800', //in meters.
         type: ['restaurant']
     };
     service.nearbySearch(requestNearby, callGetDetails);
